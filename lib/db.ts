@@ -11,7 +11,7 @@ export async function connectDB() {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     };
-    await mongoose.connect('', options);
+    await mongoose.connect(process.env.MONGO_URL!, options);
     console.log('Connected to MongoDB');
   } catch (error) {
     console.error('Error connecting to MongoDB:', error);

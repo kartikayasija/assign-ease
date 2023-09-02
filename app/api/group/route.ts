@@ -1,5 +1,5 @@
 import { connectDB } from "@/lib/db";
-import { Group } from "@/lib/models/group";
+import { Group } from "@/lib/models/groupSchema";
 
 import { NextResponse } from "next/server";
 
