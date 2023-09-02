@@ -1,19 +1,33 @@
+import { authOptions } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import { Group } from "@/lib/models/groupSchema";
+import { getServerSession } from "next-auth";
 
 import { NextResponse } from "next/server";
 
 export const POST = async (req: Request) => {
   try{
-    await connectDB();
-    const { name, admin } = await req.json();
-    if (!name || !admin) {
+    const session = await getServerSession(authOptions);
+    if(!session){
       return NextResponse.json(
-        { Error: "Both name and admin are required." },
+        { Error: "not authenticated." },
+        { status: 401 }
+      );
+    }
+    await connectDB();
+    const { name } = await req.json();
+    if (!name) {
+      return NextResponse.json(
+        { Error: "name is required." },
         { status: 400 }
       );
     }
-    const group = new Group({ name, admin });
+
+    const foundGroup = await Group.find({admin:session.user?.email, name:name})
+    if(foundGroup.length>0){
+      return NextResponse.json({Error:"Group with this name already Exists"},{status:400});
+    }
+    const group = new Group({ name, admin: session.user?.email });
     const savedGroup = await group.save();
     if (!savedGroup) {
       return NextResponse.json({ Error: "unable to save" }, { status: 400 });

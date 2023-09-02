@@ -34,5 +34,5 @@ const groupSchema: Schema<IGroup> = new Schema<IGroup>({
   },
 });
 
-export const Group: Model<IGroup> = mongoose.model<IGroup>("Group", groupSchema);
+export const Group: Model<IGroup> =mongoose.models.Group || mongoose.model<IGroup>("Group", groupSchema);
 

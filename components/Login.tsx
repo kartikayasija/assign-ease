@@ -2,17 +2,13 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import React from "react";
+import { redirect } from "next/navigation";
 
 const Login : React.FC = () => {
   const { data: session } = useSession();
 
   if (session) {
-    return (
-      <div className="flex justify-end items-center mr-1">
-        <h5 className="mr-2">{session?.user?.name}</h5>
-        <Button onClick={() => signOut()}>Sign Out</Button>
-      </div>
-    );
+    redirect('/')
   }
   return (
     <div className="flex justify-end items-center mr-1">
